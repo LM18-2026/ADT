@@ -3,6 +3,7 @@ ADTEditor::ADTEditor(ADTProcessor& p):AudioProcessorEditor(&p),proc(p){
  setSize(960,570);
  setup(mix,"mix",aMix);setup(lfoL,"lfoL",aL);setup(lfoR,"lfoR",aR);
  setup(hp,"hp",aHp);setup(lp,"lp",aLp);
+ mix.setNumDecimalPlacesToDisplay(0);hp.setNumDecimalPlacesToDisplay(0);lp.setNumDecimalPlacesToDisplay(0);
  addAndMakeVisible(filter);filter.setColour(juce::ToggleButton::tickColourId,juce::Colours::cyan);
  aFilter=std::make_unique<ButtonAttachment>(proc.state,"filter",filter);
  traceL.fill(5.05f);traceR.fill(5.05f);startTimerHz(30);
@@ -23,7 +24,7 @@ void ADTEditor::paint(juce::Graphics& g){
  g.fillAll(juce::Colour(0xff10151d));
  g.setColour(juce::Colour(0xff252e39));g.fillRoundedRectangle(12,12,936,546,12);
  g.setColour(juce::Colours::white);g.setFont(juce::Font(juce::FontOptions(38.f).withStyle("Bold")));g.drawText("ADT",32,20,130,48,juce::Justification::left);
- g.setFont(juce::Font(juce::FontOptions(18.f)));g.drawText("Artificial Double Tracking   |   LM18   |   V0.4",170,25,740,38,juce::Justification::left);
+ g.setFont(juce::Font(juce::FontOptions(18.f)));g.drawText("Artificial Double Tracking   |   LM18   |   V0.5",170,25,740,38,juce::Justification::left);
  auto panel=[&](int x,int y,int w,int h){g.setColour(juce::Colour(0xff151e28));g.fillRoundedRectangle((float)x,(float)y,(float)w,(float)h,9.f);g.setColour(juce::Colour(0xff445260));g.drawRoundedRectangle((float)x,(float)y,(float)w,(float)h,9.f,1.f);};
  panel(28,90,194,290);panel(235,90,490,290);panel(738,90,194,290);panel(28,395,904,145);
  g.setColour(juce::Colours::white);g.setFont(juce::Font(juce::FontOptions(19.f)));
