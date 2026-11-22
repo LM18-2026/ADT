@@ -24,20 +24,20 @@ void ADTEditor::paint(juce::Graphics& g){
  g.fillAll(juce::Colour(0xff10151d));
  g.setColour(juce::Colour(0xff252e39));g.fillRoundedRectangle(12,12,936,546,12);
  g.setColour(juce::Colours::white);g.setFont(juce::Font(juce::FontOptions(38.f).withStyle("Bold")));g.drawText("ADT",32,20,130,48,juce::Justification::left);
- g.setFont(juce::Font(juce::FontOptions(18.f)));g.drawText("Artificial Double Tracking   |   LM18   |   V0.5",170,25,740,38,juce::Justification::left);
+ g.setFont(juce::Font(juce::FontOptions(18.f)));g.drawText("Artificial Double Tracking   |   LM18   |   V0.6",170,25,740,38,juce::Justification::left);
  auto panel=[&](int x,int y,int w,int h){g.setColour(juce::Colour(0xff151e28));g.fillRoundedRectangle((float)x,(float)y,(float)w,(float)h,9.f);g.setColour(juce::Colour(0xff445260));g.drawRoundedRectangle((float)x,(float)y,(float)w,(float)h,9.f,1.f);};
  panel(28,90,194,290);panel(235,90,490,290);panel(738,90,194,290);panel(28,395,904,145);
  g.setColour(juce::Colours::white);g.setFont(juce::Font(juce::FontOptions(19.f)));
  g.drawText("LFO 1   (L)",45,100,160,28,juce::Justification::centred);
  g.drawText("LFO 2   (R)",755,100,160,28,juce::Justification::centred);
- g.drawText("DELAY MODULATION  0.1–10 ms",250,100,440,28,juce::Justification::centredLeft);
- g.drawText("FILTER  •  ADT ONLY",45,405,340,26,juce::Justification::left);
+ g.drawText("DELAY MODULATION  0.1-10 ms",250,100,440,28,juce::Justification::centredLeft);
+ g.drawText("FILTER  -  ADT ONLY",45,405,340,26,juce::Justification::left);
  g.setFont(juce::Font(juce::FontOptions(15.f)));
- g.drawText("0.05–6 Hz",50,340,150,24,juce::Justification::centred);
- g.drawText("0.05–6 Hz",760,340,150,24,juce::Justification::centred);
+ g.drawText("0.05-6 Hz",50,340,150,24,juce::Justification::centred);
+ g.drawText("0.05-6 Hz",760,340,150,24,juce::Justification::centred);
  g.drawText("MIX",440,401,80,25,juce::Justification::centred);
- g.drawText("HIGH PASS  0–300 Hz",210,413,210,25,juce::Justification::centred);
- g.drawText("LOW PASS  1.5–15 kHz",615,413,240,25,juce::Justification::centred);
+ g.drawText("HIGH PASS  0-300 Hz",210,413,210,25,juce::Justification::centred);
+ g.drawText("LOW PASS  1.5-15 kHz",615,413,240,25,juce::Justification::centred);
  auto graph=juce::Rectangle<float>(255,145,450,205);
  g.setColour(juce::Colour(0xff0b131b));g.fillRect(graph);
  g.setColour(juce::Colour(0xff283644));for(int i=0;i<=10;++i){float y=graph.getY()+i*graph.getHeight()/10.f;g.drawHorizontalLine((int)y,graph.getX(),graph.getRight());}
