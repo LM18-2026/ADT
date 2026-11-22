@@ -28,14 +28,20 @@ private:
  struct Mod {
   std::mt19937 rng;
   std::uniform_real_distribution<float> dist{-1.f,1.f};
-  double elapsed=0; float value=0,target=0;
-  explicit Mod(unsigned seed):rng(seed){}
+  double phase=0.0;
+  float from=0.f,to=0.f;
+  explicit Mod(unsigned seed):rng(seed){to=dist(rng);}
   float next(double sr,float hz) {
-   elapsed+=1.0/sr;
-   if(elapsed>=1.0/hz){elapsed-=1.0/hz;target=dist(rng);}
-   const float step=(float)(1.0/(sr*juce::jmax(0.02,0.7/(double)hz)));
-   value+=juce::jlimit(-step,step,target-value);
-   return value;
+   phase += (double)hz/sr;
+   if(phase>=1.0) {
+    phase-=1.0;
+    from=to;
+    to=dist(rng);
+   }
+   // Raised-cosine interpolation: zero slope at both endpoints, no held plateau.
+   const float t=(float)phase;
+   const float shaped=0.5f-0.5f*std::cos(juce::MathConstants<float>::pi*t);
+   return from+(to-from)*shaped;
   }
  } modL{0x18a1},modR{0x18b2};
  juce::AudioBuffer<float> history;
