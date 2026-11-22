@@ -3,7 +3,7 @@
 ADTProcessor::ADTProcessor():juce::AudioProcessor(BusesProperties().withInput("Input",juce::AudioChannelSet::stereo(),true).withOutput("Output",juce::AudioChannelSet::stereo(),true)),state(*this,nullptr,"PARAMS",parameters()){}
 juce::AudioProcessorValueTreeState::ParameterLayout ADTProcessor::parameters(){
  std::vector<std::unique_ptr<juce::RangedAudioParameter>> p;
- auto add=[&](const char* id,const char* name,float a,float b,float d,float skew=1.f){juce::NormalisableRange<float> r(a,b);r.skew=skew;p.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{id,1},name,r,d));};
+ auto add=[&](const char* id,const char* name,float a,float b,float d,float skew=1.f){juce::NormalisableRange<float> r(a,b);r.skew=skew;if(juce::String(id)=="mix"||juce::String(id)=="hp"||juce::String(id)=="lp")r.interval=1.f;p.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{id,1},name,r,d));};
  add("mix","ADT Mix",0,100,50);
  add("lfoL","LFO Left Hz",0.05f,6.f,0.12f,0.55f);
  add("lfoR","LFO Right Hz",0.05f,6.f,0.12f,0.55f);
@@ -43,7 +43,12 @@ void ADTProcessor::processBlock(juce::AudioBuffer<float>& buffer,juce::MidiBuffe
    return a+(b-a)*frac;
   };
   float wetL=readDelay(dl),wetR=readDelay(dr);
-  if(filtering){if(hpHz>0.01f){wetL=hp[0].processSample(wetL);wetR=hp[1].processSample(wetR);}wetL=lp[0].processSample(wetL);wetR=lp[1].processSample(wetR);}
+  if(filtering){
+   // 12 dB/oct Butterworth high/low-pass on wet signals only.
+   // Always advance filter states even at HP=0 to avoid stale-state transitions.
+   if(hpHz>0.01f){wetL=hp[0].processSample(wetL);wetR=hp[1].processSample(wetR);}
+   wetL=lp[0].processSample(wetL);wetR=lp[1].processSample(wetR);
+  }
   const float m=mixSmooth.getNextValue();
   left[i]=inL+wetL*m;right[i]=inR+wetR*m;
   if(++write==len)write=0;
